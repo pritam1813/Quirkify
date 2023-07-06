@@ -1,10 +1,21 @@
 import React, { Dispatch } from 'react';
 import { connect } from 'react-redux';
 import { fetchPosts } from '../actions/posts';
+import { PostsList } from '.';
+
+interface post {
+  id: string;
+  body: string;
+  blog: {
+    name: string;
+  };
+  date: Date;
+  note_count: number;
+}
 
 interface Props {
-  dispatch: Dispatch<any>; 
-  posts: [];
+  dispatch: Dispatch<any>;
+  posts: [post];
 }
 
 class App extends React.Component<Props> {
@@ -13,12 +24,17 @@ class App extends React.Component<Props> {
   }
 
   render() {
-    console.log('Props: ', this.props);
-    return <div>App</div>;
+    const { posts } = this.props;
+
+    return (
+      <div>
+        <PostsList posts={posts} />
+      </div>
+    );
   }
 }
 
-function mapStateToProps(state: { posts: [] }) {
+function mapStateToProps(state: { posts: [post] }) {
   return {
     posts: state.posts,
   };
