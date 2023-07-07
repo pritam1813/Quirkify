@@ -1,0 +1,9 @@
+const ThemeColors = {
+  green: '#006D77',
+  lightgreen: '#83C5BE',
+  light: '#EDF6F9',
+  pink: '#FFDDD2',
+  orange: '#E29578',
+};
+
+export default ThemeColors;
