@@ -47,16 +47,16 @@ class PostsList extends React.Component<Props> {
           width: '100%',
           height: 'auto',
           backgroundColor: ThemeColors.pink,
-          padding: 2,
+          padding: '2% 0',
         }}
         className="posts-list"
       >
         {posts.map((post) => (
           <Card
             sx={{
-              maxWidth: '80%',
+              maxWidth: '60%',
               backgroundColor: ThemeColors.light,
-              margin: '0 auto 5%',
+              margin: '0 auto 2%',
             }}
             className="post-wrapper"
             key={post.id}

@@ -2,7 +2,7 @@ import React, { Dispatch } from 'react';
 import { connect } from 'react-redux';
 import { fetchPosts } from '../actions/posts';
 import { PostsList } from '.';
-import { Container } from '@mui/material';
+import { Navbar } from '.';
 
 interface post {
   id: string;
@@ -28,15 +28,10 @@ class App extends React.Component<Props> {
     const { posts } = this.props;
 
     return (
-      <Container
-        style={{
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-        }}
-      >
+      <div>
+        <Navbar />
         <PostsList posts={posts} />
-      </Container>
+      </div>
     );
   }
 }
