@@ -17,6 +17,7 @@ import {
 } from '@mui/material';
 import ThemeColors from '../assets/theme';
 import SearchIcon from '@mui/icons-material/Search';
+import { Link } from 'react-router-dom';
 
 // Define the interface for the state of the Navbar component
 interface NavbarState {
@@ -82,7 +83,18 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 }));
 
 // Array of pages in the navbar
-const pages = ['Register', 'Login'];
+const pages = [
+  {
+    id: 0,
+    name: 'Register',
+    link: '/signup',
+  },
+  {
+    id: 1,
+    name: 'Login',
+    link: '/login',
+  },
+];
 
 // Array of settings in the user menu
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
@@ -124,24 +136,23 @@ class Navbar extends React.Component<{}, NavbarState> {
         <Container maxWidth={false}>
           <Toolbar disableGutters>
             {/* Brand logo */}
-            <Typography
-              variant="h6"
-              noWrap
-              component="a"
-              href="/"
-              sx={{
-                display: { xs: 'none', md: 'flex' },
-                fontFamily: 'monospace',
-                fontWeight: 700,
-                letterSpacing: '.3rem',
-                color: 'inherit',
-                textDecoration: 'none',
-                justifyContent: 'center',
-              }}
-            >
-              Quirkify
-            </Typography>
-
+            <Link to={'/'} style={{ textDecoration: 'none', color: 'inherit' }}>
+              <Typography
+                variant="h6"
+                noWrap
+                sx={{
+                  display: { xs: 'none', md: 'flex' },
+                  fontFamily: 'monospace',
+                  fontWeight: 700,
+                  letterSpacing: '.3rem',
+                  color: 'inherit',
+                  textDecoration: 'none',
+                  justifyContent: 'center',
+                }}
+              >
+                Quirkify
+              </Typography>
+            </Link>
             {/* Search bar (visible on small screens) */}
             <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
               <Search id="search-bar">
@@ -214,18 +225,29 @@ class Navbar extends React.Component<{}, NavbarState> {
                 onClose={this.handleCloseUserMenu}
               >
                 {/* User menu items */}
-                {settings.map((setting) => (
-                  <MenuItem key={setting} onClick={this.handleCloseUserMenu}>
-                    <Typography textAlign="center">{setting}</Typography>
-                  </MenuItem>
-                ))}
+                <Link
+                  to={'/logout'}
+                  style={{ textDecoration: 'none', color: 'inherit' }}
+                >
+                  {settings.map((setting) => (
+                    <MenuItem key={setting} onClick={this.handleCloseUserMenu}>
+                      <Typography textAlign="center">{setting}</Typography>
+                    </MenuItem>
+                  ))}
+                </Link>
               </Menu>
 
               {/* Pages */}
               <Box component="span">
                 {pages.map((page) => (
-                  <Button key={page} sx={{ color: 'white' }}>
-                    {page}
+                  <Button key={page.id}>
+                    <Link
+                      to={page.link}
+                      style={{ textDecoration: 'none', color: 'white' }}
+                    >
+                      {' '}
+                      {page.name}{' '}
+                    </Link>
                   </Button>
                 ))}
               </Box>

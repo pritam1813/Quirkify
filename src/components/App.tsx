@@ -1,42 +1,35 @@
-import React, { Dispatch } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
-import { fetchPosts } from '../actions/posts';
-import { PostsList } from '.';
-import { Navbar } from '.';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { Home, Navbar, PageNotFound } from '.';
+import { Props, Post } from './types';
 
-interface post {
-  id: string;
-  body: string;
-  blog: {
-    name: string;
-  };
-  date: Date;
-  note_count: number;
-}
+const Login = () => <div>Login</div>;
 
-interface Props {
-  dispatch: Dispatch<any>;
-  posts: [post];
-}
+const Signup = () => <div>Signup</div>;
 
 class App extends React.Component<Props> {
-  componentDidMount() {
-    this.props.dispatch(fetchPosts());
-  }
-
   render() {
-    const { posts } = this.props;
-
+    const props = this.props;
     return (
-      <div>
-        <Navbar />
-        <PostsList posts={posts} />
-      </div>
+      <BrowserRouter>
+        <>
+          <Navbar />
+          {/* <PostsList posts={posts} /> */}
+
+          <Routes>
+            <Route path="/" element={<Home {...props} />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/signup" element={<Signup />} />
+            <Route path="*" element={<PageNotFound />}></Route>
+          </Routes>
+        </>
+      </BrowserRouter>
     );
   }
 }
 
-function mapStateToProps(state: { posts: [post] }) {
+function mapStateToProps(state: { posts: Post[] }) {
   return {
     posts: state.posts,
   };

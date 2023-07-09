@@ -13,19 +13,10 @@ import ShareIcon from '@mui/icons-material/Share';
 import CommentIcon from '@mui/icons-material/Comment';
 import ThemeColors from '../assets/theme';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
-
-interface post {
-  id: string;
-  body: string;
-  blog: {
-    name: string;
-  };
-  date: Date;
-  note_count: number;
-}
+import { Post } from './types';
 
 interface Props {
-  posts: post[];
+  posts: Post[];
 }
 
 class PostsList extends React.Component<Props> {
