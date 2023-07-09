@@ -1,12 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import { Home, Navbar, PageNotFound } from '.';
+import { Home, Navbar, Login, SignUp, PageNotFound } from '.';
 import { Props, Post } from './types';
-
-const Login = () => <div>Login</div>;
-
-const Signup = () => <div>Signup</div>;
 
 class App extends React.Component<Props> {
   render() {
@@ -20,7 +16,7 @@ class App extends React.Component<Props> {
           <Routes>
             <Route path="/" element={<Home {...props} />} />
             <Route path="/login" element={<Login />} />
-            <Route path="/signup" element={<Signup />} />
+            <Route path="/signup" element={<SignUp />} />
             <Route path="*" element={<PageNotFound />}></Route>
           </Routes>
         </>
