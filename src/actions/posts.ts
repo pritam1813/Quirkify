@@ -1,3 +1,4 @@
+import { APIUrls } from '../helpers/urls';
 import { UPDATE_POSTS } from './actionTypes';
 
 interface Action {
@@ -7,8 +8,7 @@ interface Action {
 
 export function fetchPosts() {
   return (dispatch: (action: Action) => void) => {
-    const APIKEY = import.meta.env.VITE_API_KEY;
-    const url = `https://api.tumblr.com/v2/blog/todayontumblr.tumblr.com/posts/text?api_key=${APIKEY}&limit=3`;
+    const url = APIUrls.fetchPosts();
     fetch(url)
       .then((response) => {
         return response.json();
