@@ -16,4 +16,16 @@ interface Props {
   posts: Post[];
 }
 
-export type { Post, Props };
+interface Auth {
+  user: {};
+  error: string;
+  isLoggedIn: boolean;
+  inProgress: boolean;
+}
+
+interface SignInProps {
+  dispatch: Dispatch<any>;
+  auth: Auth;
+}
+
+export type { Post, Props, SignInProps, Auth };

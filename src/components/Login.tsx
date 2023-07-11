@@ -1,4 +1,5 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import {
   Avatar,
@@ -12,12 +13,13 @@ import {
   Typography,
   Container,
   ThemeProvider,
+  Alert,
 } from '@mui/material';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import { createTheme } from '@mui/material/styles';
 import ThemeColors from '../assets/theme';
-
-interface SignInProps {}
+import { login } from '../actions/auth';
+import { SignInProps, Auth } from './types';
 
 interface SignInState {
   // emailInputRef: RefObject<HTMLInputElement>;
@@ -41,9 +43,12 @@ class SignIn extends React.Component<SignInProps, SignInState> {
 
   handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
+
+    const { email, password } = this.state;
+
+    this.props.dispatch(login(email, password));
     // console.log("Email: ", this.state.emailInputRef.current?.value);
     // console.log("Password", this.state.passwordInputRef.current?.value);
-    console.log(this.state);
   }
 
   handleInputChange(event: React.ChangeEvent<HTMLInputElement>) {
@@ -67,6 +72,8 @@ class SignIn extends React.Component<SignInProps, SignInState> {
       },
     });
 
+    const { error, inProgress } = this.props.auth;
+
     return (
       <ThemeProvider theme={defaultTheme}>
         <Container component="main" maxWidth="xs">
@@ -79,12 +86,17 @@ class SignIn extends React.Component<SignInProps, SignInState> {
               alignItems: 'center',
             }}
           >
-            <Avatar sx={{ m: 1, bgcolor: 'secondary.light' }}>
+            <Avatar sx={{ mt: 1, bgcolor: 'secondary.light' }}>
               <LockOutlinedIcon />
             </Avatar>
             <Typography component="h1" variant="h5">
               Sign in
             </Typography>
+            {error && (
+              <Alert sx={{ mt: 2 }} variant="outlined" severity="error">
+                {error}
+              </Alert>
+            )}
             <Box
               component="form"
               onSubmit={this.handleSubmit}
@@ -123,14 +135,26 @@ class SignIn extends React.Component<SignInProps, SignInState> {
                 control={<Checkbox value="remember" color="primary" />}
                 label="Remember me"
               />
-              <Button
-                type="submit"
-                fullWidth
-                variant="contained"
-                sx={{ mt: 3, mb: 2 }}
-              >
-                Sign In
-              </Button>
+              {inProgress ? (
+                <Button
+                  type="submit"
+                  fullWidth
+                  variant="contained"
+                  sx={{ mt: 3, mb: 2 }}
+                  disabled={inProgress}
+                >
+                  Signing In ...
+                </Button>
+              ) : (
+                <Button
+                  type="submit"
+                  fullWidth
+                  variant="contained"
+                  sx={{ mt: 3, mb: 2 }}
+                >
+                  Sign In
+                </Button>
+              )}
               <Grid container>
                 <Grid item xs>
                   <Link
@@ -176,4 +200,10 @@ class SignIn extends React.Component<SignInProps, SignInState> {
   }
 }
 
-export default SignIn;
+function mapStateToProps(state: { auth: Auth }) {
+  return {
+    auth: state.auth,
+  };
+}
+
+export default connect(mapStateToProps)(SignIn);
