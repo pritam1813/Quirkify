@@ -1,4 +1,5 @@
-import * as React from 'react';
+import React from 'react';
+import { Link } from 'react-router-dom';
 import {
   Avatar,
   Button,
@@ -10,131 +11,169 @@ import {
   Box,
   Typography,
   Container,
+  ThemeProvider,
 } from '@mui/material';
-import { Link } from 'react-router-dom';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { createTheme } from '@mui/material/styles';
 import ThemeColors from '../assets/theme';
 
-function Copyright(props: any) {
-  return (
-    <Typography
-      variant="body2"
-      color="text.secondary"
-      align="center"
-      {...props}
-    >
-      {'Copyright © '}
-      <Link style={{ color: ThemeColors.green, textDecoration: 'none' }} to="/">
-        Quirkify
-      </Link>{' '}
-      {new Date().getFullYear()}
-      {'.'}
-    </Typography>
-  );
+interface SignInProps {}
+
+interface SignInState {
+  // emailInputRef: RefObject<HTMLInputElement>;
+  // passwordInputRef: RefObject<HTMLInputElement>;
+  email: '';
+  password: '';
 }
 
-// TODO remove, this demo shouldn't need to reset the theme.
-const defaultTheme = createTheme({
-  palette: {
-    primary: {
-      main: ThemeColors.orange,
-    },
-    secondary: {
-      main: ThemeColors.green,
-      light: ThemeColors.lightgreen,
-    },
-  },
-});
+class SignIn extends React.Component<SignInProps, SignInState> {
+  constructor(props: SignInProps) {
+    super(props);
+    this.state = {
+      // emailInputRef: React.createRef<HTMLInputElement>(),
+      // passwordInputRef: React.createRef<HTMLInputElement>(),
+      email: '',
+      password: '',
+    };
+    this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleInputChange = this.handleInputChange.bind(this);
+  }
 
-export default function SignIn() {
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get('email'),
-      password: data.get('password'),
-    });
-  };
+    // console.log("Email: ", this.state.emailInputRef.current?.value);
+    // console.log("Password", this.state.passwordInputRef.current?.value);
+    console.log(this.state);
+  }
 
-  return (
-    <ThemeProvider theme={defaultTheme}>
-      <Container component="main" maxWidth="xs">
-        <CssBaseline />
-        <Box
-          sx={{
-            marginTop: 8,
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-          }}
-        >
-          <Avatar sx={{ m: 1, bgcolor: 'secondary.light' }}>
-            <LockOutlinedIcon />
-          </Avatar>
-          <Typography component="h1" variant="h5">
-            Sign in
-          </Typography>
+  handleInputChange(event: React.ChangeEvent<HTMLInputElement>) {
+    const { name, value } = event.target;
+    this.setState((prevState) => ({
+      ...prevState,
+      [name]: value,
+    }));
+  }
+
+  render() {
+    const defaultTheme = createTheme({
+      palette: {
+        primary: {
+          main: ThemeColors.orange,
+        },
+        secondary: {
+          main: ThemeColors.green,
+          light: ThemeColors.lightgreen,
+        },
+      },
+    });
+
+    return (
+      <ThemeProvider theme={defaultTheme}>
+        <Container component="main" maxWidth="xs">
+          <CssBaseline />
           <Box
-            component="form"
-            onSubmit={handleSubmit}
-            noValidate
-            sx={{ mt: 1 }}
+            sx={{
+              marginTop: 8,
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+            }}
           >
-            <TextField
-              margin="normal"
-              required
-              fullWidth
-              id="email"
-              label="Email Address"
-              name="email"
-              autoComplete="email"
-              autoFocus
-            />
-            <TextField
-              margin="normal"
-              required
-              fullWidth
-              name="password"
-              label="Password"
-              type="password"
-              id="password"
-              autoComplete="current-password"
-            />
-            <FormControlLabel
-              control={<Checkbox value="remember" color="primary" />}
-              label="Remember me"
-            />
-            <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              sx={{ mt: 3, mb: 2 }}
+            <Avatar sx={{ m: 1, bgcolor: 'secondary.light' }}>
+              <LockOutlinedIcon />
+            </Avatar>
+            <Typography component="h1" variant="h5">
+              Sign in
+            </Typography>
+            <Box
+              component="form"
+              onSubmit={this.handleSubmit}
+              noValidate
+              sx={{ mt: 1 }}
             >
-              Sign In
-            </Button>
-            <Grid container>
-              <Grid item xs>
-                <Link
-                  to="/"
-                  style={{ color: 'inherit', textDecoration: 'none' }}
-                >
-                  Forgot password?
-                </Link>
+              <TextField
+                margin="normal"
+                required
+                fullWidth
+                id="email"
+                label="Email Address"
+                name="email"
+                autoComplete="email"
+                autoFocus
+                // inputRef={this.state.emailInputRef}
+                onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
+                  this.handleInputChange(event)
+                }
+                value={this.state.email}
+              />
+              <TextField
+                margin="normal"
+                required
+                fullWidth
+                name="password"
+                label="Password"
+                type="password"
+                id="password"
+                autoComplete="current-password"
+                //inputRef={this.state.passwordInputRef}
+                value={this.state.password}
+                onChange={this.handleInputChange}
+              />
+              <FormControlLabel
+                control={<Checkbox value="remember" color="primary" />}
+                label="Remember me"
+              />
+              <Button
+                type="submit"
+                fullWidth
+                variant="contained"
+                sx={{ mt: 3, mb: 2 }}
+              >
+                Sign In
+              </Button>
+              <Grid container>
+                <Grid item xs>
+                  <Link
+                    to="/"
+                    style={{ color: 'inherit', textDecoration: 'none' }}
+                  >
+                    Forgot password?
+                  </Link>
+                </Grid>
+                <Grid item>
+                  <Link
+                    to="/"
+                    style={{ color: 'inherit', textDecoration: 'none' }}
+                  >
+                    {"Don't have an account? Sign Up"}
+                  </Link>
+                </Grid>
               </Grid>
-              <Grid item>
-                <Link
-                  to="/"
-                  style={{ color: 'inherit', textDecoration: 'none' }}
-                >
-                  {"Don't have an account? Sign Up"}
-                </Link>
-              </Grid>
-            </Grid>
+            </Box>
           </Box>
-        </Box>
-        <Copyright sx={{ mt: 8, mb: 4 }} />
-      </Container>
-    </ThemeProvider>
-  );
+          <Typography
+            variant="body2"
+            color="text.secondary"
+            align="center"
+            sx={{ mt: 8, mb: 4 }}
+          >
+            {'Copyright © '}
+            <Link
+              style={{
+                color: ThemeColors.green,
+                textDecoration: 'none',
+              }}
+              to="/"
+            >
+              Quirkify
+            </Link>{' '}
+            {new Date().getFullYear()}
+            {'.'}
+          </Typography>
+        </Container>
+      </ThemeProvider>
+    );
+  }
 }
+
+export default SignIn;
