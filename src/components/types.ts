@@ -3,12 +3,15 @@ import { Dispatch } from 'react';
 // Post Type
 interface Post {
   id: string;
-  body: string;
-  blog: {
-    name: string;
-  };
-  date: Date;
-  note_count: number;
+  name: string;
+  title: string;
+  content: string;
+
+  // blog: {
+  //   name: string;
+  // };
+  // date: Date;
+  // note_count: number;
 }
 
 interface Props {

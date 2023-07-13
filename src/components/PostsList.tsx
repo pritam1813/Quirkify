@@ -23,14 +23,14 @@ class PostsList extends React.Component<Props> {
   render() {
     const { posts } = this.props;
 
-    const options = {
-      hour: 'numeric' as const,
-      minute: 'numeric' as const,
-      hour12: true as const,
-      day: 'numeric' as const,
-      month: 'long' as const,
-      year: 'numeric' as const,
-    };
+    // const options = {
+    //   hour: 'numeric' as const,
+    //   minute: 'numeric' as const,
+    //   hour12: true as const,
+    //   day: 'numeric' as const,
+    //   month: 'long' as const,
+    //   year: 'numeric' as const,
+    // };
 
     return (
       <Box
@@ -59,10 +59,10 @@ class PostsList extends React.Component<Props> {
                   T
                 </Avatar>
               }
-              title={post.blog.name}
-              subheader={new Intl.DateTimeFormat('en-US', options).format(
-                new Date(post.date)
-              )}
+              title={post.name}
+              // subheader={new Intl.DateTimeFormat('en-US', options).format(
+              //   new Date(post.date)
+              // )}
             ></CardHeader>
             <CardContent className="post-content" sx={{ textAlign: 'center' }}>
               <CardMedia
@@ -85,8 +85,10 @@ class PostsList extends React.Component<Props> {
               <Typography
                 variant="body2"
                 sx={{ color: ThemeColors.green, fontSize: '1.5rem' }}
-                dangerouslySetInnerHTML={{ __html: post.body }}
-              />
+                // dangerouslySetInnerHTML={{ __html: post.body }}
+              >
+                {post.content}
+              </Typography>
             </CardContent>
 
             <CardActions
@@ -96,7 +98,8 @@ class PostsList extends React.Component<Props> {
             >
               <IconButton aria-label="post-like">
                 <FavoriteBorderIcon />
-                <span className="post-likes-length">{post.note_count}</span>
+                {/* <span className="post-likes-length">{post.note_count}</span> */}
+                <span className="post-likes-length">2</span>
               </IconButton>
               <IconButton>
                 <CommentIcon />

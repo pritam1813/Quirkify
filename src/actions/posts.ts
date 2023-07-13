@@ -15,7 +15,7 @@ export function fetchPosts() {
       })
       .then((data) => {
         console.log('DATA ', data);
-        dispatch(updatePosts(data.response.posts));
+        dispatch(updatePosts(data));
       });
   };
 }
