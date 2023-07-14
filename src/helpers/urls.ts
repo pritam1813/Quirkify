@@ -3,8 +3,8 @@
 const API_ROOT = 'http://localhost:3000';
 
 export const APIUrls = {
-  login: () => 'http://localhost:3000/login', // Only For Example
-  signup: () => `${API_ROOT}/signup`, // Only For Example
+  login: () => `${API_ROOT}/user/login`,
+  signup: () => `${API_ROOT}/user/signup`,
 
   // fetchPosts: (limit: number = 5, blog_identifier: string = 'todayontumblr') =>
   //   `${API_ROOT}/blog/${blog_identifier}.tumblr.com/posts/text?api_key=${APIKEY}&limit=${limit}`,

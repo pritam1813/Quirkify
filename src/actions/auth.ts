@@ -36,8 +36,10 @@ export function login(email: string, password: string) {
     })
       .then((response) => response.json())
       .then((data) => {
-        // console.log(data);
+        console.log(data);
         if (data.success) {
+          //Storing jwt token
+          localStorage.setItem('token', data.token);
           //Dispatch action to save user
           dispatch(loginSuccess(data.user));
           return;
