@@ -5,6 +5,7 @@ import {
   LOGIN_SUCCESS,
   AUTHENTICATE_USER,
   LOGOUT_USER,
+  CLEAR_AUTH_STATE,
 } from './actionTypes';
 import { APIUrls } from '../helpers/urls';
 import { getFormBody } from '../helpers/utils';
@@ -65,5 +66,11 @@ export function authenticateUser(user: {}) {
 export function logoutUser() {
   return {
     type: LOGOUT_USER,
+  };
+}
+
+export function clearAuthState() {
+  return {
+    type: CLEAR_AUTH_STATE,
   };
 }

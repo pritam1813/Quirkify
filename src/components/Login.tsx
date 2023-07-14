@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { Link, Navigate } from 'react-router-dom';
 import {
   Avatar,
   Button,
@@ -18,7 +18,7 @@ import {
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import { createTheme } from '@mui/material/styles';
 import ThemeColors from '../assets/theme';
-import { login } from '../actions/auth';
+import { clearAuthState, login } from '../actions/auth';
 import { SignInProps, Auth } from './types';
 
 interface SignInState {
@@ -39,6 +39,10 @@ class SignIn extends React.Component<SignInProps, SignInState> {
     };
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleInputChange = this.handleInputChange.bind(this);
+  }
+
+  componentWillUnmount() {
+    this.props.dispatch(clearAuthState());
   }
 
   handleSubmit(event: React.FormEvent<HTMLFormElement>) {
@@ -72,7 +76,11 @@ class SignIn extends React.Component<SignInProps, SignInState> {
       },
     });
 
-    const { error, inProgress } = this.props.auth;
+    const { error, inProgress, isLoggedIn } = this.props.auth;
+
+    if (isLoggedIn) {
+      return <Navigate to="/" />;
+    }
 
     return (
       <ThemeProvider theme={defaultTheme}>
