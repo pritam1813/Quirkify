@@ -17,13 +17,22 @@ interface Post {
 interface Props {
   dispatch: Dispatch<any>;
   posts: Post[];
+  auth: Auth;
+  user: User;
 }
 
 interface Auth {
-  user: {};
+  user: User;
   error: string;
   isLoggedIn: boolean;
   inProgress: boolean;
+}
+
+interface User {
+  name: string;
+  email: string;
+  user_id: string;
+  picture: string;
 }
 
 interface SignInProps {
@@ -31,4 +40,4 @@ interface SignInProps {
   auth: Auth;
 }
 
-export type { Post, Props, SignInProps, Auth };
+export type { Post, Props, SignInProps, Auth, User };

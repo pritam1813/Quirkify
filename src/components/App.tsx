@@ -2,16 +2,25 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { Home, Navbar, Login, SignUp, PageNotFound } from '.';
-import { Props, Post } from './types';
+import { Props, Post, User } from './types';
 import jwt_decode from 'jwt-decode';
+import { authenticateUser } from '../actions/auth';
 
 class App extends React.Component<Props> {
   componentDidMount(): void {
     const token = localStorage.getItem('token');
 
     if (token) {
-      const user = jwt_decode(token);
+      const user: User = jwt_decode(token);
       console.log('USER: ', user);
+      this.props.dispatch(
+        authenticateUser({
+          id: user.user_id,
+          email: user.email,
+          name: user.name,
+          picture: user.picture,
+        })
+      );
     }
   }
   render() {
@@ -19,7 +28,7 @@ class App extends React.Component<Props> {
     return (
       <BrowserRouter>
         <>
-          <Navbar />
+          <Navbar {...props} />
           {/* <PostsList posts={posts} /> */}
 
           <Routes>

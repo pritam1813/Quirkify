@@ -1,5 +1,11 @@
 import { Dispatch } from 'redux';
-import { LOGIN_FAILED, LOGIN_START, LOGIN_SUCCESS } from './actionTypes';
+import {
+  LOGIN_FAILED,
+  LOGIN_START,
+  LOGIN_SUCCESS,
+  AUTHENTICATE_USER,
+  LOGOUT_USER,
+} from './actionTypes';
 import { APIUrls } from '../helpers/urls';
 import { getFormBody } from '../helpers/utils';
 
@@ -46,5 +52,18 @@ export function login(email: string, password: string) {
         }
         dispatch(loginFailed(data.message));
       });
+  };
+}
+
+export function authenticateUser(user: {}) {
+  return {
+    type: AUTHENTICATE_USER,
+    user,
+  };
+}
+
+export function logoutUser() {
+  return {
+    type: LOGOUT_USER,
   };
 }

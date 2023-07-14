@@ -1,7 +1,9 @@
 import {
+  AUTHENTICATE_USER,
   LOGIN_FAILED,
   LOGIN_START,
   LOGIN_SUCCESS,
+  LOGOUT_USER,
 } from '../actions/actionTypes';
 
 interface Action {
@@ -37,6 +39,18 @@ export default function auth(state = initialAuthState, action: Action) {
         ...state,
         error: action.error,
         inProgress: false,
+        isLoggedIn: false,
+      };
+    case AUTHENTICATE_USER:
+      return {
+        ...state,
+        user: action.user,
+        isLoggedIn: true,
+      };
+    case LOGOUT_USER:
+      return {
+        ...state,
+        user: {},
         isLoggedIn: false,
       };
     default:

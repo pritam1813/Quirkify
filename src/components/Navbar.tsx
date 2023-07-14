@@ -1,11 +1,12 @@
-import React, { MouseEvent } from 'react';
+import React from 'react';
+import { connect } from 'react-redux';
 import {
   AppBar,
   Box,
   Container,
   IconButton,
-  Menu,
-  MenuItem,
+  // Menu,
+  // MenuItem,
   Toolbar,
   Tooltip,
   Typography,
@@ -18,12 +19,16 @@ import {
 import ThemeColors from '../assets/theme';
 import SearchIcon from '@mui/icons-material/Search';
 import { Link } from 'react-router-dom';
+import { Auth, Props } from './types';
+import { logoutUser } from '../actions/auth';
 
+/*
 // Define the interface for the state of the Navbar component
 interface NavbarState {
   anchorElNav: HTMLElement | null; // Element that triggers the navigation menu
   anchorElUser: HTMLElement | null; // Element that triggers the user menu
 }
+*/
 
 // Styles for the search bar
 const Search = styled('div')(({ theme }) => ({
@@ -97,9 +102,10 @@ const pages = [
 ];
 
 // Array of settings in the user menu
-const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
+//const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 
-class Navbar extends React.Component<{}, NavbarState> {
+class Navbar extends React.Component<Props> {
+  /*
   constructor(props: {}) {
     super(props);
     this.state = {
@@ -127,9 +133,16 @@ class Navbar extends React.Component<{}, NavbarState> {
   handleCloseUserMenu = () => {
     this.setState({ anchorElUser: null });
   };
+*/
+
+  logOut = () => {
+    localStorage.removeItem('token');
+    this.props.dispatch(logoutUser());
+  };
 
   render() {
-    const { anchorElUser } = this.state;
+    // const { anchorElUser } = this.state;
+    const { auth } = this.props;
 
     return (
       <AppBar position="sticky" sx={{ backgroundColor: ThemeColors.green }}>
@@ -203,11 +216,37 @@ class Navbar extends React.Component<{}, NavbarState> {
             {/* User menu and pages */}
             <Box sx={{ flexGrow: 0 }}>
               {/* User menu */}
-              <Tooltip title="Open settings">
-                <IconButton onClick={this.handleOpenUserMenu} sx={{ p: 0 }}>
-                  <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
-                </IconButton>
-              </Tooltip>
+
+              {auth.isLoggedIn ? (
+                <Box component="span">
+                  <Tooltip title="Open settings">
+                    {/* <IconButton onClick={this.handleOpenUserMenu} sx={{ p: 0 }}> */}
+                    <IconButton>
+                      <Avatar alt="User Avatar Mini" src={auth.user.picture} />
+                    </IconButton>
+                  </Tooltip>
+                  <Button sx={{ color: 'white' }}>{auth.user.name}</Button>
+                  <Button sx={{ color: 'white' }} onClick={this.logOut}>
+                    Logout
+                  </Button>
+                </Box>
+              ) : (
+                <Box component="span">
+                  {pages.map((page) => (
+                    <Button key={page.id}>
+                      <Link
+                        to={page.link}
+                        style={{ textDecoration: 'none', color: 'white' }}
+                      >
+                        {' '}
+                        {page.name}{' '}
+                      </Link>
+                    </Button>
+                  ))}
+                </Box>
+              )}
+
+              {/* 
               <Menu
                 sx={{ mt: '45px' }}
                 id="menu-appbar"
@@ -225,6 +264,7 @@ class Navbar extends React.Component<{}, NavbarState> {
                 onClose={this.handleCloseUserMenu}
               >
                 {/* User menu items */}
+              {/*
                 <Link
                   to={'/logout'}
                   style={{ textDecoration: 'none', color: 'inherit' }}
@@ -235,22 +275,8 @@ class Navbar extends React.Component<{}, NavbarState> {
                     </MenuItem>
                   ))}
                 </Link>
-              </Menu>
-
-              {/* Pages */}
-              <Box component="span">
-                {pages.map((page) => (
-                  <Button key={page.id}>
-                    <Link
-                      to={page.link}
-                      style={{ textDecoration: 'none', color: 'white' }}
-                    >
-                      {' '}
-                      {page.name}{' '}
-                    </Link>
-                  </Button>
-                ))}
-              </Box>
+                </Menu> 
+              */}
             </Box>
           </Toolbar>
         </Container>
@@ -259,4 +285,10 @@ class Navbar extends React.Component<{}, NavbarState> {
   }
 }
 
-export default Navbar;
+function mapStateToProps(state: { auth: Auth }) {
+  return {
+    auth: state.auth,
+  };
+}
+
+export default connect(mapStateToProps)(Navbar);
