@@ -1,10 +1,24 @@
-import React from 'react';
+import React, { ReactNode } from 'react';
 import { connect } from 'react-redux';
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import { Home, Navbar, Login, SignUp, PageNotFound } from '.';
-import { Props, Post, User } from './types';
+import { Props, Post, User, Auth } from './types';
 import jwt_decode from 'jwt-decode';
 import { authenticateUser } from '../actions/auth';
+
+const Settings = () => <div>Setting</div>;
+
+interface ProtectedProps {
+  isLoggedIn: boolean;
+  children: ReactNode;
+}
+
+function Protected({ isLoggedIn, children }: ProtectedProps) {
+  if (!isLoggedIn) {
+    return <Navigate to="/login" replace />;
+  }
+  return children;
+}
 
 class App extends React.Component<Props> {
   componentDidMount(): void {
@@ -25,6 +39,7 @@ class App extends React.Component<Props> {
   }
   render() {
     const props = this.props;
+    const { auth } = this.props;
     return (
       <BrowserRouter>
         <>
@@ -35,6 +50,15 @@ class App extends React.Component<Props> {
             <Route path="/" element={<Home {...props} />} />
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<SignUp />} />
+            <Route
+              path="/settings"
+              element={
+                <Protected isLoggedIn={auth.isLoggedIn}>
+                  {' '}
+                  <Settings />
+                </Protected>
+              }
+            />
             <Route path="*" element={<PageNotFound />}></Route>
           </Routes>
         </>
@@ -43,9 +67,10 @@ class App extends React.Component<Props> {
   }
 }
 
-function mapStateToProps(state: { posts: Post[] }) {
+function mapStateToProps(state: { posts: Post[]; auth: Auth }) {
   return {
     posts: state.posts,
+    auth: state.auth,
   };
 }
 
