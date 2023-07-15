@@ -1,59 +1,41 @@
 import React from 'react';
-import { connect } from 'react-redux';
-import { Link, Navigate } from 'react-router-dom';
 import {
   Avatar,
+  Button,
   CssBaseline,
   TextField,
-  FormControlLabel,
-  Checkbox,
-  Grid,
   Box,
   Typography,
   Container,
   ThemeProvider,
-  Alert,
+  createTheme,
 } from '@mui/material';
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
-import LoadingButton from '@mui/lab/LoadingButton';
-import LoginIcon from '@mui/icons-material/Login';
-import { createTheme } from '@mui/material/styles';
 import ThemeColors from '../assets/theme';
-import { clearAuthState, login } from '../actions/auth';
-import { SignInProps, Auth } from './types';
+import { Link } from 'react-router-dom';
+import { Auth, SettingsProps } from './types';
+import { connect } from 'react-redux';
 
-interface SignInState {
-  // emailInputRef: RefObject<HTMLInputElement>;
-  // passwordInputRef: RefObject<HTMLInputElement>;
+interface SettingsState {
+  name: '';
   email: '';
   password: '';
+  confirmPassword: '';
+  editMode: false;
 }
 
-class SignIn extends React.Component<SignInProps, SignInState> {
-  constructor(props: SignInProps) {
+class Settings extends React.Component<SettingsProps, SettingsState> {
+  constructor(props: SettingsProps) {
     super(props);
     this.state = {
-      // emailInputRef: React.createRef<HTMLInputElement>(),
-      // passwordInputRef: React.createRef<HTMLInputElement>(),
+      name: '',
       email: '',
       password: '',
+      confirmPassword: '',
+      editMode: false,
     };
-    this.handleSubmit = this.handleSubmit.bind(this);
-    this.handleInputChange = this.handleInputChange.bind(this);
   }
-
-  componentWillUnmount() {
-    this.props.dispatch(clearAuthState());
-  }
-
   handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
-
-    const { email, password } = this.state;
-
-    this.props.dispatch(login(email, password));
-    // console.log("Email: ", this.state.emailInputRef.current?.value);
-    // console.log("Password", this.state.passwordInputRef.current?.value);
   }
 
   handleInputChange(event: React.ChangeEvent<HTMLInputElement>) {
@@ -76,13 +58,8 @@ class SignIn extends React.Component<SignInProps, SignInState> {
         },
       },
     });
-
-    const { error, inProgress, isLoggedIn } = this.props.auth;
-
-    if (isLoggedIn) {
-      return <Navigate to="/" />;
-    }
-
+    const { user } = this.props.auth;
+    const { editMode } = this.state;
     return (
       <ThemeProvider theme={defaultTheme}>
         <Container component="main" maxWidth="xs">
@@ -95,24 +72,45 @@ class SignIn extends React.Component<SignInProps, SignInState> {
               alignItems: 'center',
             }}
           >
-            <Avatar sx={{ mt: 1, bgcolor: 'secondary.light' }}>
-              <LockOutlinedIcon />
-            </Avatar>
             <Typography component="h1" variant="h5">
-              Sign in
+              Profile
             </Typography>
+            <Avatar
+              alt="Remy Sharp"
+              src="https://pub-a97d073ded0a4120985495569ad8bd03.r2.dev/defaultAvatar.webp"
+              sx={{ width: 56, height: 56 }}
+            />
+            {/* 
             {error && (
               <Alert sx={{ mt: 2 }} variant="outlined" severity="error">
                 {error}
               </Alert>
-            )}
+            )} */}
             <Box
               component="form"
-              onSubmit={this.handleSubmit}
+              // onSubmit={this.handleSubmit}
               noValidate
               sx={{ mt: 1 }}
             >
               <TextField
+                disabled={!editMode}
+                margin="normal"
+                required
+                fullWidth
+                id="name"
+                label="Name"
+                name="name"
+                autoComplete="name"
+                autoFocus
+                // inputRef={this.state.emailInputRef}
+                onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
+                  this.handleInputChange(event)
+                }
+                value={editMode ? this.state.name : user.name}
+              />
+
+              <TextField
+                disabled={!editMode}
                 margin="normal"
                 required
                 fullWidth
@@ -120,14 +118,14 @@ class SignIn extends React.Component<SignInProps, SignInState> {
                 label="Email Address"
                 name="email"
                 autoComplete="email"
-                autoFocus
                 // inputRef={this.state.emailInputRef}
                 onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
                   this.handleInputChange(event)
                 }
-                value={this.state.email}
+                value={editMode ? this.state.email : user.email}
               />
               <TextField
+                disabled={!editMode}
                 margin="normal"
                 required
                 fullWidth
@@ -140,39 +138,52 @@ class SignIn extends React.Component<SignInProps, SignInState> {
                 value={this.state.password}
                 onChange={this.handleInputChange}
               />
-              <FormControlLabel
-                control={<Checkbox value="remember" color="primary" />}
-                label="Remember me"
-              />
-              <LoadingButton
-                loading={inProgress}
-                loadingPosition="start"
-                startIcon={<LoginIcon />}
-                variant="outlined"
-                type="submit"
-                fullWidth
-                sx={{ mt: 3, mb: 2 }}
-              >
-                Sign In
-              </LoadingButton>
-              <Grid container>
-                <Grid item xs>
-                  <Link
-                    to="/"
-                    style={{ color: 'inherit', textDecoration: 'none' }}
-                  >
-                    Forgot password?
-                  </Link>
-                </Grid>
-                <Grid item>
-                  <Link
-                    to="/signup"
-                    style={{ color: 'inherit', textDecoration: 'none' }}
-                  >
-                    {"Don't have an account? Sign Up"}
-                  </Link>
-                </Grid>
-              </Grid>
+              {editMode && (
+                <TextField
+                  margin="normal"
+                  required
+                  fullWidth
+                  name="confirm-password"
+                  label="Confirm Password"
+                  type="password"
+                  id="confirm-password"
+                  autoComplete="current-password"
+                  //inputRef={this.state.passwordInputRef}
+                  value={this.state.password}
+                  onChange={this.handleInputChange}
+                />
+              )}
+
+              {editMode ? (
+                <Button
+                  type="submit"
+                  fullWidth
+                  variant="contained"
+                  sx={{ mt: 3, mb: 2 }}
+                >
+                  Save
+                </Button>
+              ) : (
+                <Button
+                  type="submit"
+                  fullWidth
+                  variant="outlined"
+                  sx={{ mt: 3, mb: 2 }}
+                >
+                  Edit Profile
+                </Button>
+              )}
+
+              {editMode && (
+                <Button
+                  type="submit"
+                  fullWidth
+                  variant="outlined"
+                  sx={{ mt: 3, mb: 2 }}
+                >
+                  Go Back
+                </Button>
+              )}
             </Box>
           </Box>
           <Typography
@@ -206,4 +217,4 @@ function mapStateToProps(state: { auth: Auth }) {
   };
 }
 
-export default connect(mapStateToProps)(SignIn);
+export default connect(mapStateToProps)(Settings);

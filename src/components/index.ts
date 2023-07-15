@@ -5,5 +5,6 @@ import PageNotFound from './PageNotFound';
 import Home from './Home';
 import Login from './Login';
 import SignUp from './Signup';
+import Settings from './Settings';
 
-export { Home, PostsList, App, Navbar, Login, SignUp, PageNotFound };
+export { Home, PostsList, App, Navbar, Login, SignUp, PageNotFound, Settings };
