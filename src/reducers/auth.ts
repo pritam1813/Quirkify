@@ -5,6 +5,9 @@ import {
   LOGIN_START,
   LOGIN_SUCCESS,
   LOGOUT_USER,
+  SIGNUP_START,
+  SIGNUP_SUCCESS,
+  SIGNUP_FAILED,
 } from '../actions/actionTypes';
 
 interface Action {
@@ -28,11 +31,13 @@ export default function auth(state = initialAuthState, action: Action) {
         error: null,
       };
     case LOGIN_START:
+    case SIGNUP_START:
       return {
         ...state,
         inProgress: true,
       };
     case LOGIN_SUCCESS:
+    case SIGNUP_SUCCESS:
       return {
         ...state,
         user: action.user,
@@ -41,6 +46,7 @@ export default function auth(state = initialAuthState, action: Action) {
         error: null,
       };
     case LOGIN_FAILED:
+    case SIGNUP_FAILED:
       return {
         ...state,
         error: action.error,

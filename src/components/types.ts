@@ -40,4 +40,9 @@ interface SignInProps {
   auth: Auth;
 }
 
-export type { Post, Props, SignInProps, Auth, User };
+interface SignUpProps {
+  dispatch: Dispatch<any>;
+  auth: Auth;
+}
+
+export type { Post, Props, SignInProps, Auth, User, SignUpProps };

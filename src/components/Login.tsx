@@ -174,7 +174,7 @@ class SignIn extends React.Component<SignInProps, SignInState> {
                 </Grid>
                 <Grid item>
                   <Link
-                    to="/"
+                    to="/signup"
                     style={{ color: 'inherit', textDecoration: 'none' }}
                   >
                     {"Don't have an account? Sign Up"}
