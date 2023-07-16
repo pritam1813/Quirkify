@@ -10,8 +10,9 @@ import {
   ThemeProvider,
   createTheme,
 } from '@mui/material';
+import EditIcon from '@mui/icons-material/Edit';
+import SaveIcon from '@mui/icons-material/Save';
 import ThemeColors from '../assets/theme';
-import { Link } from 'react-router-dom';
 import { Auth, SettingsProps } from './types';
 import { connect } from 'react-redux';
 
@@ -45,6 +46,13 @@ class Settings extends React.Component<SettingsProps, SettingsState> {
       [name]: value,
     }));
   }
+
+  handleChange = (fieldName: string, val: string | boolean) => {
+    this.setState((prevState) => ({
+      ...prevState,
+      [fieldName]: val,
+    }));
+  };
 
   render() {
     const defaultTheme = createTheme({
@@ -88,7 +96,7 @@ class Settings extends React.Component<SettingsProps, SettingsState> {
             )} */}
             <Box
               component="form"
-              // onSubmit={this.handleSubmit}
+              onSubmit={this.handleSubmit}
               noValidate
               sx={{ mt: 1 }}
             >
@@ -103,9 +111,9 @@ class Settings extends React.Component<SettingsProps, SettingsState> {
                 autoComplete="name"
                 autoFocus
                 // inputRef={this.state.emailInputRef}
-                onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
-                  this.handleInputChange(event)
-                }
+                onChange={(e) => {
+                  this.handleChange('name', e.target.value);
+                }}
                 value={editMode ? this.state.name : user.name}
               />
 
@@ -119,9 +127,9 @@ class Settings extends React.Component<SettingsProps, SettingsState> {
                 name="email"
                 autoComplete="email"
                 // inputRef={this.state.emailInputRef}
-                onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
-                  this.handleInputChange(event)
-                }
+                onChange={(e) => {
+                  this.handleChange('email', e.target.value);
+                }}
                 value={editMode ? this.state.email : user.email}
               />
               <TextField
@@ -136,7 +144,9 @@ class Settings extends React.Component<SettingsProps, SettingsState> {
                 autoComplete="current-password"
                 //inputRef={this.state.passwordInputRef}
                 value={this.state.password}
-                onChange={this.handleInputChange}
+                onChange={(e) => {
+                  this.handleChange('password', e.target.value);
+                }}
               />
               {editMode && (
                 <TextField
@@ -150,7 +160,9 @@ class Settings extends React.Component<SettingsProps, SettingsState> {
                   autoComplete="current-password"
                   //inputRef={this.state.passwordInputRef}
                   value={this.state.password}
-                  onChange={this.handleInputChange}
+                  onChange={(e) => {
+                    this.handleChange('confirm-password', e.target.value);
+                  }}
                 />
               )}
 
@@ -160,6 +172,7 @@ class Settings extends React.Component<SettingsProps, SettingsState> {
                   fullWidth
                   variant="contained"
                   sx={{ mt: 3, mb: 2 }}
+                  endIcon={<SaveIcon />}
                 >
                   Save
                 </Button>
@@ -169,6 +182,10 @@ class Settings extends React.Component<SettingsProps, SettingsState> {
                   fullWidth
                   variant="outlined"
                   sx={{ mt: 3, mb: 2 }}
+                  endIcon={<EditIcon />}
+                  onClick={() => {
+                    this.handleChange('editMode', true);
+                  }}
                 >
                   Edit Profile
                 </Button>
@@ -178,33 +195,16 @@ class Settings extends React.Component<SettingsProps, SettingsState> {
                 <Button
                   type="submit"
                   fullWidth
-                  variant="outlined"
-                  sx={{ mt: 3, mb: 2 }}
+                  variant="text"
+                  onClick={() => {
+                    this.handleChange('editMode', false);
+                  }}
                 >
                   Go Back
                 </Button>
               )}
             </Box>
           </Box>
-          <Typography
-            variant="body2"
-            color="text.secondary"
-            align="center"
-            sx={{ mt: 8, mb: 4 }}
-          >
-            {'Copyright © '}
-            <Link
-              style={{
-                color: ThemeColors.green,
-                textDecoration: 'none',
-              }}
-              to="/"
-            >
-              Quirkify
-            </Link>{' '}
-            {new Date().getFullYear()}
-            {'.'}
-          </Typography>
         </Container>
       </ThemeProvider>
     );

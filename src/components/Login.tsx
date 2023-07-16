@@ -175,25 +175,6 @@ class SignIn extends React.Component<SignInProps, SignInState> {
               </Grid>
             </Box>
           </Box>
-          <Typography
-            variant="body2"
-            color="text.secondary"
-            align="center"
-            sx={{ mt: 8, mb: 4 }}
-          >
-            {'Copyright © '}
-            <Link
-              style={{
-                color: ThemeColors.green,
-                textDecoration: 'none',
-              }}
-              to="/"
-            >
-              Quirkify
-            </Link>{' '}
-            {new Date().getFullYear()}
-            {'.'}
-          </Typography>
         </Container>
       </ThemeProvider>
     );

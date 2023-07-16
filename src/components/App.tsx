@@ -1,7 +1,7 @@
 import React, { ReactNode } from 'react';
 import { connect } from 'react-redux';
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
-import { Home, Navbar, Login, SignUp, PageNotFound, Settings } from '.';
+import { Home, Navbar, Login, SignUp, PageNotFound, Settings, Footer } from '.';
 import { Props, Post, User, Auth } from './types';
 import jwt_decode from 'jwt-decode';
 import { authenticateUser } from '../actions/auth';
@@ -59,6 +59,7 @@ class App extends React.Component<Props> {
             />
             <Route path="*" element={<PageNotFound />}></Route>
           </Routes>
+          <Footer />
         </>
       </BrowserRouter>
     );
