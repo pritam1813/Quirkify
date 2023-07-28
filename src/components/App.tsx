@@ -1,6 +1,12 @@
-import React, { ReactNode } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
-import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
+import {
+  BrowserRouter,
+  Navigate,
+  Route,
+  Routes,
+  useLocation,
+} from 'react-router-dom';
 import { Home, Navbar, Login, SignUp, PageNotFound, Settings, Footer } from '.';
 import { Props, Post, User, Auth } from './types';
 import jwt_decode from 'jwt-decode';
@@ -8,15 +14,28 @@ import { authenticateUser } from '../actions/auth';
 
 interface ProtectedProps {
   isLoggedIn: boolean;
-  children: ReactNode;
+  path: string;
+  element: React.ReactElement;
 }
 
-function Protected({ isLoggedIn, children }: ProtectedProps) {
-  if (!isLoggedIn) {
-    return <Navigate to="/login" replace />;
-  }
-  return children;
-}
+const LoginWrapper = () => {
+  const location = useLocation();
+  return <Login location={location} />;
+};
+
+const ProtectedRoutes: React.FC<ProtectedProps> = ({ isLoggedIn, element }) => {
+  const location = useLocation();
+
+  return isLoggedIn ? (
+    element
+  ) : (
+    <Navigate
+      to={{ pathname: '/login' }}
+      replace
+      state={{ from: { pathname: location.pathname } }}
+    />
+  );
+};
 
 class App extends React.Component<Props> {
   componentDidMount(): void {
@@ -46,15 +65,16 @@ class App extends React.Component<Props> {
 
           <Routes>
             <Route path="/" element={<Home {...props} />} />
-            <Route path="/login" element={<Login />} />
+            <Route path="/login" element={<LoginWrapper />} />
             <Route path="/signup" element={<SignUp />} />
             <Route
               path="/settings"
               element={
-                <Protected isLoggedIn={auth.isLoggedIn}>
-                  {' '}
-                  <Settings />
-                </Protected>
+                <ProtectedRoutes
+                  path="/settings"
+                  element={<Settings />}
+                  isLoggedIn={auth.isLoggedIn}
+                />
               }
             />
             <Route path="*" element={<PageNotFound />}></Route>

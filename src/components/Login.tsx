@@ -79,8 +79,11 @@ class SignIn extends React.Component<SignInProps, SignInState> {
 
     const { error, inProgress, isLoggedIn } = this.props.auth;
 
+    const { location } = this.props;
+    const { from } = location.state || { from: { pathname: '/' } };
+
     if (isLoggedIn) {
-      return <Navigate to="/" />;
+      return <Navigate to={from} />;
     }
 
     return (

@@ -38,6 +38,7 @@ interface User {
 interface SignInProps {
   dispatch: Dispatch<any>;
   auth: Auth;
+  location: any;
 }
 
 interface SignUpProps {

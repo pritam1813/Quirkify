@@ -219,17 +219,17 @@ class Navbar extends React.Component<Props> {
 
               {auth.isLoggedIn ? (
                 <Box component="span">
-                  <Tooltip title="Open settings">
-                    {/* <IconButton onClick={this.handleOpenUserMenu} sx={{ p: 0 }}> */}
-                    <Link to={'/settings'}>
+                  <Link to={'/settings'}>
+                    <Tooltip title="Open settings">
+                      {/* <IconButton onClick={this.handleOpenUserMenu} sx={{ p: 0 }}> */}
                       <IconButton>
                         <Avatar
                           alt="User Avatar Mini"
                           src={auth.user.picture}
                         />
                       </IconButton>
-                    </Link>
-                  </Tooltip>
+                    </Tooltip>
+                  </Link>
                   <Button sx={{ color: 'white' }}>{auth.user.name}</Button>
                   <Button sx={{ color: 'white' }} onClick={this.logOut}>
                     Logout
